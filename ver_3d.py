@@ -257,7 +257,7 @@ def gerar_visualizacao_3d(
         height=760,
         title=dict(
             text="Modelo Turbidítico 3D — Fatias Ortogonais Interativas",
-            font=dict(size=20),
+            font=dict(size=18),
             x=0.02,
             y=0.985,
             xanchor="left",
