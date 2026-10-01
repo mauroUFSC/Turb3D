@@ -9,6 +9,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# PyInstaller build artifacts
+build/
+*.spec
+
 # Arquivos gerados grandes (mantendo index.html para GitHub Pages)
 *.html
 

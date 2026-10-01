@@ -73,42 +73,66 @@ pip install -r requirements.txt
 
 ---
 
-## 4. Como Executar Localmente
+## 4. Como Executar
 
-Com o ambiente ativado, execute:
+### Opção A: Executável Windows Standalone (Sem Necessidade de Python)
+O projeto inclui o executável independente **`VisualizadorTurbiditico3D.exe`** (disponível na raiz e na pasta `dist/`).
+- Basta dar um **duplo clique** em `VisualizadorTurbiditico3D.exe` (ou no inicializador `Iniciar_Visualizador.bat`).
+- Uma interface gráfica intuitiva será aberta para você:
+  1. **Selecionar genericamente qualquer arquivo `.npz`** no seu computador (via botão *Procurar...* ou arrastando o arquivo).
+  2. **Inspecionar instantaneamente o modelo:** grade 3D ($N_x \times N_y \times N_z$), limites espaciais em metros e todas as propriedades encontradas.
+  3. **Escolher o arquivo HTML de saída** e opção de abertura automática no navegador.
+  4. Clicar em **🚀 Gerar Visualização 3D Interativa**.
+
+### Opção B: Interface Gráfica via Python
+Com o ambiente virtual ativado, você pode abrir a interface gráfica diretamente:
 
 ```powershell
+python app_gui.py
+# ou com o arquivo npz já pré-selecionado:
+python app_gui.py modelo_reservatorio_3d.npz
+```
+
+### Opção C: Linha de Comando (CLI)
+Para gerar diretamente o HTML via terminal:
+
+```powershell
+# Carrega modelo_reservatorio_3d.npz por padrão e abre no navegador
 python ver_3d.py
-```
 
-O script irá:
-1. Carregar `modelo_reservatorio_3d.npz` por padrão.
-2. Gerar/atualizar o arquivo `index.html` otimizado para web.
-3. Abrir automaticamente a aba no seu navegador padrão (Edge, Chrome, Firefox).
-
-Para selecionar outro arquivo NPZ, informe o caminho como argumento:
-
-```powershell
+# Informar outro arquivo NPZ genérico:
 python ver_3d.py outro_modelo.npz
-```
 
-> **Dica para gerar sem abrir navegador:**  
-> `python ver_3d.py --no-browser`
+# Gerar sem abrir o navegador:
+python ver_3d.py --no-browser
+```
 
 ---
 
-## 5. Controles Interativos no Navegador
+## 5. Como Recompilar o Executável Standalone
+
+Caso faça alterações no código e deseje recompilar o executável para Windows:
+
+```powershell
+python -m PyInstaller --clean --onefile --windowed --name "VisualizadorTurbiditico3D" --icon "app_icon.ico" --add-data "app_icon.ico;." app_gui.py
+```
+
+O novo arquivo executável será gerado em `dist/VisualizadorTurbiditico3D.exe`.
+
+---
+
+## 6. Controles Interativos no Navegador
 
 - **3 Sliders Independentes de Fatias (abaixo do gráfico 3D):**
-  - **Slider Z (Azul - Profundidade):** Desliza entre as 35 camadas geológicas (1850 m a 2200 m).
-  - **Slider Y (Verde - Inline):** Desliza o plano vertical ao longo do eixo Y (0 m a 7000 m).
-  - **Slider X (Vermelho - Crossline):** Desliza o plano vertical ao longo do eixo X (0 m a 9000 m).
+  - **Slider Z (Azul - Profundidade):** Desliza entre as camadas geológicas em profundidade.
+  - **Slider Y (Verde - Inline):** Desliza o plano vertical ao longo do eixo Y.
+  - **Slider X (Vermelho - Crossline):** Desliza o plano vertical ao longo do eixo X.
 - **Menu Dropdown (canto superior esquerdo):**  
   Alterna instantaneamente a propriedade exibida em todas as fatias:
   - `porosity` (Porosidade)
-  - `permeability_mD` (Permeabilidade em mD)
+  - `permeability` (Permeabilidade em mD)
   - `facies` (Fácies sedimentares)
-  - `depth` (Profundidade)
+  - `density`, `Vp`, `Vs`, `Sw`, `Ip`, etc.
 - **Legenda Interativa (canto superior):**
   - Clique em qualquer fatia (`Fatia Z`, `Fatia X`, `Fatia Y`) para ocultá-la ou exibi-la.
   - Clique em **"Volume 3D"** para ativar a nuvem volumétrica com transparência junto com as fatias.
@@ -120,11 +144,13 @@ python ver_3d.py outro_modelo.npz
 
 ---
 
-## 6. Estrutura dos Arquivos
+## 7. Estrutura dos Arquivos
 
-- `index.html`: Arquivo principal servido pelo GitHub Pages.
-- `modelo_turbiditico_3D.npz`: Arquivo de dados tridimensionais (eixos `x`, `y`, `z` e matrizes de propriedades).
-- `ver_3d.py`: Script Python com Plotly que gera e abre a visualização por fatias X, Y, Z e volume 3D.
-- `requirements.txt`: Dependências mínimas (`numpy`, `plotly`).
-- `.github/workflows/deploy.yml`: Workflow do GitHub Actions para publicação contínua no GitHub Pages.
-- `.gitignore`: Configuração para ignorar arquivos temporários e caches.
+- `VisualizadorTurbiditico3D.exe`: Executável Windows standalone pronto para uso.
+- `Iniciar_Visualizador.bat`: Inicializador em lote com detecção inteligente de ambiente.
+- `app_gui.py`: Interface gráfica em Tkinter/ttk com inspeção em tempo real e geração não-bloqueante.
+- `ver_3d.py`: Motor de processamento, carregador genérico de `.npz`, Plotly 3D e CLI.
+- `app_icon.ico`: Ícone temático tridimensional para o executável.
+- `modelo_reservatorio_3d.npz`: Arquivo de dados de referência (150×150×100 células).
+- `index.html`: Arquivo interativo servido no GitHub Pages.
+- `requirements.txt`: Dependências do ambiente Python (`numpy`, `plotly`, `pyinstaller`, `pillow`).
